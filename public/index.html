@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f4ebd8">
+    <meta name="description" content="Build a little world, find your people, and stay awhile. Welcome to Bublux.">
+    <title>Bublux - Player-Made 3D Worlds</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="Bublux home"><span class="brand-mark">b</span><span>bublux</span></a>
+        <nav class="main-nav" aria-label="Main navigation">
+          <a class="nav-link active" href="#discover">Home</a>
+          <a class="nav-link" href="#worlds">Games</a>
+          <a class="nav-link" href="#play">Build</a>
+          <a class="nav-link" href="#players">People</a>
+          <a class="nav-link" href="#about">Forum</a>
+        </nav>
+        <div class="top-actions">
+          <span class="online-pill"><i></i><span id="online-count">1</span> online</span>
+          <button class="portal-button" id="profile-button">Builder</button>
+        </div>
+      </header>
+
+      <main id="discover">
+        <section class="hero">
+          <div class="hero-copy">
+            <p class="eyebrow"><span class="sparkle">✳</span> WELCOME TO BUBLUX</p>
+            <h1>Your place<br><span>to build & play.</span></h1>
+            <p class="hero-description">Explore player-made worlds, build anything you can imagine, and hang out with friends in 3D.</p>
+            <div class="hero-actions">
+              <button class="button button-primary" id="play-hero"><span>▶</span> Play Bublux</button>
+              <a class="text-link" href="#worlds">Browse games <span>→</span></a>
+            </div>
+            <div class="friend-note"><div class="friend-pips"><b>M</b><b>J</b><b>A</b></div><span><strong id="online-friends">1 builder</strong> online right now</span></div>
+          </div>
+          <div class="hero-art">
+            <canvas id="hero-canvas" aria-label="A 3D Bublux builder standing on a studded brick baseplate"></canvas>
+            <div class="art-label"><span>✦</span> a world built brick by brick</div>
+          </div>
+        </section>
+
+        <section class="world-section" id="worlds">
+          <div class="section-heading">
+            <div><p class="eyebrow">PLAYER-MADE PLACES</p><h2>Games <span class="listing-count">3 worlds</span></h2></div>
+            <a href="#play" class="all-worlds" id="browse-worlds">Open a world <span>→</span></a>
+          </div>
+          <div class="directory-tools">
+            <label class="game-search"><span>⌕</span><input id="game-search" type="search" placeholder="Search games..." aria-label="Search games"></label>
+            <label class="sort-label" for="game-sort">Sort by</label>
+            <select id="game-sort" aria-label="Sort games"><option value="active">Most active</option><option value="name">Name</option><option value="visits">Featured</option></select>
+          </div>
+          <div class="world-grid">
+            <button class="world-card card-meadow" data-room="sunny-side" data-visits="2400"><span class="card-tag"><i></i><span class="world-count">0 playing</span></span><div class="card-art"><canvas class="world-thumb" data-scene="meadow" aria-label="Sunny Side Up 3D game preview"></canvas></div><span class="card-info"><span><strong>Sunny Side Up</strong><small>by Riverstone · Build &amp; hang out</small></span><span class="card-arrow">▶</span></span></button>
+            <button class="world-card card-docks" data-room="cloud-docks" data-visits="830"><span class="card-tag"><i></i><span class="world-count">0 playing</span></span><div class="card-art"><canvas class="world-thumb" data-scene="docks" aria-label="Cloud Nine Docks 3D game preview"></canvas></div><span class="card-info"><span><strong>Cloud Nine Docks</strong><small>by peachybuilds · Explore</small></span><span class="card-arrow">▶</span></span></button>
+            <button class="world-card card-garden" data-room="mossy-garden" data-visits="1100"><span class="card-tag"><i></i><span class="world-count">0 playing</span></span><div class="card-art"><canvas class="world-thumb" data-scene="garden" aria-label="Mossy Garden 3D game preview"></canvas></div><span class="card-info"><span><strong>Mossy Garden</strong><small>by mossybrick · Build a clubhouse</small></span><span class="card-arrow">▶</span></span></button>
+          </div>
+        </section>
+
+        <section class="play-section" id="play">
+          <div class="play-intro">
+            <div><p class="eyebrow">ENTER THE SANDBOX</p><h2>Start building.</h2><p>Choose a world, grab some bricks, and make it yours.</p></div>
+            <div class="room-control"><label for="room-name">YOUR HANGOUT</label><div><span>⌂</span><input id="room-name" maxlength="24" value="sunny-side" aria-label="Room name"><button id="join-room">Join room <b>→</b></button></div></div>
+          </div>
+          <div class="game-layout">
+            <div class="game-frame">
+              <div class="game-toolbar">
+                <div class="room-status"><span class="live-dot"></span><strong id="room-title">Sunny Side</strong><span class="room-count" id="room-count">1 builder</span></div>
+                <div class="game-toolbar-right"><span class="autosave-label"><i></i> multiplayer</span><button id="sound-toggle" aria-label="Toggle sound effects" title="Sound effects off">♫</button><button id="fullscreen-toggle" aria-label="Toggle fullscreen" title="Toggle fullscreen">⛶</button></div>
+              </div>
+              <div class="tool-row" role="toolbar" aria-label="Build tools">
+                <span class="tool-caption">TOOLS</span>
+                <button class="tool-button active" data-tool="build" title="Place a brick">▧ <span>Build</span></button>
+                <button class="tool-button" data-tool="move" title="Move a brick">↔ <span>Move</span></button>
+                <button class="tool-button" data-tool="copy" title="Copy a brick">▣ <span>Copy</span></button>
+                <button class="tool-button" data-tool="delete" title="Delete a brick">× <span>Delete</span></button>
+                <span id="tool-message" class="tool-message">Build · right-drag orbit · wheel zoom</span>
+              </div>
+              <div class="canvas-wrap" id="canvas-wrap">
+                <canvas id="world-canvas" aria-label="Bublux block-building world. Use WASD to move and click to build."></canvas>
+                <div class="game-tip" id="game-tip"><span>✦</span> Click the baseplate to place a brick</div>
+                <div class="world-coordinate" id="coordinate">x 09 · y 09</div>
+                <div class="touch-controls" aria-label="Touch movement controls">
+                  <div class="touch-dpad"><button data-key="w" aria-label="Move forward">▲</button><button data-key="a" aria-label="Move left">◀</button><button data-key="s" aria-label="Move backward">▼</button><button data-key="d" aria-label="Move right">▶</button></div>
+                  <button class="touch-jump" data-key="space" aria-label="Jump">JUMP</button>
+                </div>
+              </div>
+              <div class="game-controls">
+                <div class="palette"><span>BRICKS</span><button class="swatch selected" data-color="#e34b4b" aria-label="Red brick"></button><button class="swatch" data-color="#3366cc" aria-label="Blue brick"></button><button class="swatch" data-color="#3a9b52" aria-label="Green brick"></button><button class="swatch" data-color="#f4cf32" aria-label="Yellow brick"></button><button class="swatch" data-color="#8d55c5" aria-label="Purple brick"></button></div>
+                <div class="movement-hint"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd><span>move · Space jump · mouse view</span></div>
+              </div>
+            </div>
+            <aside class="side-panel">
+              <div class="panel-card people-card" id="players"><div class="panel-heading"><h3>Players here</h3><span class="people-number" id="people-number">1</span></div><div id="player-list" class="player-list"></div><div class="invite-note"><span>✦</span> Invite a friend to build here.<br>Share the room name!</div></div>
+              <div class="panel-card chat-card"><div class="panel-heading"><h3>Chat</h3><span class="chat-dot"></span></div><div id="chat-messages" class="chat-messages" aria-live="polite"><p class="welcome-note">Say hello to the players in this world!</p></div><form id="chat-form"><input id="chat-input" maxlength="180" placeholder="Type a message..." autocomplete="off" aria-label="Chat message"><button aria-label="Send chat message">↑</button></form></div>
+            </aside>
+          </div>
+          <p class="gentle-note"><span>♡</span> Made by players. Built one brick at a time.</p>
+        </section>
+      </main>
+      <footer id="about"><a class="brand footer-brand" href="#"><span class="brand-mark">b</span><span>bublux</span></a><span>A small place to make a big mess. &nbsp;© 2026 Bublux</span><span class="footer-flower">✿</span></footer>
+    </div>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

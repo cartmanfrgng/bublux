@@ -1,0 +1,16 @@
+{
+  "name": "bublux",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A nostalgic multiplayer block-building sandbox",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "three": "^0.180.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
