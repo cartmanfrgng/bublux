@@ -7,7 +7,7 @@ import * as THREE from "/vendor/three.module.js";
   localStorage.setItem("bublux-player-id", playerId);
   const playerName = localStorage.getItem("bublux-player-name") || `Builder ${Math.floor(10 + Math.random() * 90)}`;
   localStorage.setItem("bublux-player-name", playerName);
-  const player = { id: playerId, name: playerName, color: "#3366cc", x: 9, y: 9 };
+  const player = { id: playerId, name: playerName, color: "#3366cc", x: 9, y: 9, rotation: Math.PI };
   const colors = ["#e34b4b", "#3366cc", "#3a9b52", "#f4cf32", "#8d55c5"];
   let selectedColor = colors[0];
   let roomName = "sunny-side";
@@ -16,6 +16,8 @@ import * as THREE from "/vendor/three.module.js";
   let lastMoveSent = 0;
   let tipTimer;
   let cameraYaw = 0;
+  let cameraPitch = 0.36;
+  let cameraDistance = 13;
   let dragPointer = null;
   let suppressContextMenu = false;
   let selectedTool = "build";
@@ -26,6 +28,8 @@ import * as THREE from "/vendor/three.module.js";
   const pressedKeys = new Set();
   let jumpVelocity = 0;
   let jumpHeight = 0;
+  const directorySearch = document.querySelector("#game-search");
+  const directorySort = document.querySelector("#game-sort");
 
   const scene = new THREE.Scene();
   scene.background = new THREE.Color("#83c8ef");
@@ -347,6 +351,7 @@ import * as THREE from "/vendor/three.module.js";
   renderWorldThumbnails();
 
   let localAvatar = createAvatar(player.name, player.color);
+  localAvatar.rotation.y = player.rotation;
   world.add(localAvatar);
 
   function blockMaterial(color) {
@@ -421,6 +426,7 @@ import * as THREE from "/vendor/three.module.js";
         world.add(avatar);
       }
       avatar.userData.targetPosition = new THREE.Vector3(person.x - 9.5, 0, person.y - 9.5);
+      avatar.userData.targetRotation = person.rotation ?? Math.PI;
     }
   }
 
@@ -478,6 +484,29 @@ import * as THREE from "/vendor/three.module.js";
     updateDirectoryCounts();
   }
 
+  function sortDirectory() {
+    const cards = [...document.querySelectorAll(".world-card")];
+    const query = directorySearch.value.trim().toLowerCase();
+    for (const card of cards) {
+      const matches = card.textContent.toLowerCase().includes(query);
+      card.hidden = !matches;
+    }
+    const visible = cards.filter((card) => !card.hidden);
+    visible.sort((a, b) => {
+      if (directorySort.value === "name") return a.querySelector("strong").textContent.localeCompare(b.querySelector("strong").textContent);
+      if (directorySort.value === "visits") return Number(b.dataset.visits) - Number(a.dataset.visits);
+      const count = (card) => Number.parseInt(card.querySelector(".world-count")?.textContent || "0", 10) || 0;
+      return count(b) - count(a);
+    });
+    const grid = document.querySelector(".world-grid");
+    visible.forEach((card) => grid.append(card));
+    const countLabel = document.querySelector(".listing-count");
+    countLabel.textContent = `${visible.length} ${visible.length === 1 ? "world" : "worlds"}`;
+  }
+
+  directorySearch.addEventListener("input", sortDirectory);
+  directorySort.addEventListener("change", sortDirectory);
+
   async function updateDirectoryCounts() {
     const cards = [...document.querySelectorAll(".world-card")];
     await Promise.all(cards.map(async (card) => {
@@ -489,6 +518,7 @@ import * as THREE from "/vendor/three.module.js";
         if (count) count.textContent = `${state.players.length} playing`;
       } catch {}
     }));
+    sortDirectory();
   }
 
   async function refreshState() {
@@ -504,7 +534,7 @@ import * as THREE from "/vendor/three.module.js";
     const now = Date.now();
     if (now - lastMoveSent < 100) return;
     lastMoveSent = now;
-    request("/api/move", { id: player.id, x: player.x, y: player.y }).catch(() => {});
+    request("/api/move", { id: player.id, x: player.x, y: player.y, rotation: player.rotation }).catch(() => {});
     document.querySelector("#coordinate").textContent = `x ${String(Math.round(player.x)).padStart(2, "0")} · y ${String(Math.round(player.y)).padStart(2, "0")}`;
   }
 
@@ -534,7 +564,7 @@ import * as THREE from "/vendor/three.module.js";
       button.classList.toggle("active", button.dataset.tool === tool);
     });
     const descriptions = {
-      build: "Click the baseplate to build",
+      build: "Build · right-drag orbit · wheel zoom",
       move: "Click a brick, then where it should go",
       copy: "Click a brick, then where to copy it",
       delete: "Click a brick to delete it",
@@ -618,10 +648,15 @@ import * as THREE from "/vendor/three.module.js";
       suppressContextMenu = true;
     }
     cameraYaw += dx * 0.008;
+    cameraPitch = Math.max(0.12, Math.min(0.78, cameraPitch + (event.clientY - dragPointer.y) * 0.006));
     dragPointer.x = event.clientX;
     dragPointer.y = event.clientY;
   });
   canvas.addEventListener("pointerup", () => { if (dragPointer) setTimeout(() => { dragPointer = null; }, 30); });
+  canvas.addEventListener("wheel", (event) => {
+    event.preventDefault();
+    cameraDistance = Math.max(7, Math.min(22, cameraDistance + event.deltaY * 0.012));
+  }, { passive: false });
   window.addEventListener("keydown", (event) => {
     if (["INPUT", "TEXTAREA"].includes(document.activeElement.tagName)) return;
     const key = event.key.toLowerCase();
@@ -693,6 +728,7 @@ import * as THREE from "/vendor/three.module.js";
     localStorage.setItem("bublux-player-name", player.name);
     world.remove(localAvatar);
     localAvatar = createAvatar(player.name, player.color);
+    localAvatar.rotation.y = player.rotation;
     world.add(localAvatar);
     document.querySelector("#profile-button").textContent = player.name;
     refreshState();
@@ -719,15 +755,16 @@ import * as THREE from "/vendor/three.module.js";
     const inputLength = Math.hypot(forward, sideways);
     if (inputLength) {
       const speed = 4.4 * delta / inputLength;
-      const moveX = Math.sin(cameraYaw) * forward + Math.cos(cameraYaw) * sideways;
-      const moveZ = -Math.cos(cameraYaw) * forward + Math.sin(cameraYaw) * sideways;
+      const moveX = -Math.sin(cameraYaw) * forward + Math.cos(cameraYaw) * sideways;
+      const moveZ = -Math.cos(cameraYaw) * forward - Math.sin(cameraYaw) * sideways;
       const nextX = Math.max(0, Math.min(19, player.x + moveX * speed));
       const nextY = Math.max(0, Math.min(19, player.y + moveZ * speed));
       const blocked = (x, y) => jumpHeight < 0.85
         && roomData.blocks.some((block) => block.x === Math.round(x) && block.y === Math.round(y) && block.z === 0);
       if (!blocked(nextX, player.y)) player.x = nextX;
       if (!blocked(player.x, nextY)) player.y = nextY;
-      localAvatar.rotation.y = Math.atan2(moveX, moveZ);
+      player.rotation = Math.atan2(moveX, moveZ);
+      localAvatar.rotation.y = player.rotation;
       sendMove();
     }
     if (pressedKeys.has("space") && jumpHeight === 0) jumpVelocity = 8.5;
@@ -749,8 +786,16 @@ import * as THREE from "/vendor/three.module.js";
     localAvatar.userData.armRight.rotation.x = stride * 0.7;
     for (const avatar of remoteAvatars.values()) {
       if (avatar.userData.targetPosition) avatar.position.lerp(avatar.userData.targetPosition, Math.min(1, delta * 7));
+      if (Number.isFinite(avatar.userData.targetRotation)) {
+        const difference = THREE.MathUtils.euclideanModulo(avatar.userData.targetRotation - avatar.rotation.y + Math.PI, Math.PI * 2) - Math.PI;
+        avatar.rotation.y += difference * Math.min(1, delta * 7);
+      }
     }
-    const cameraOffset = new THREE.Vector3(Math.sin(cameraYaw) * 12, 9, Math.cos(cameraYaw) * 15);
+    const cameraOffset = new THREE.Vector3(
+      Math.sin(cameraYaw) * cameraDistance * Math.cos(cameraPitch),
+      cameraDistance * Math.sin(cameraPitch),
+      Math.cos(cameraYaw) * cameraDistance * Math.cos(cameraPitch),
+    );
     const desired = target.clone().add(cameraOffset);
     desired.y += jumpHeight;
     camera.position.lerp(desired, Math.min(1, delta * 3));

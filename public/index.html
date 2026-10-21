@@ -45,13 +45,18 @@
 
         <section class="world-section" id="worlds">
           <div class="section-heading">
-            <div><p class="eyebrow">PLAYER-MADE PLACES</p><h2>Games</h2></div>
-            <a href="#play" class="all-worlds" id="browse-worlds">More games <span>→</span></a>
+            <div><p class="eyebrow">PLAYER-MADE PLACES</p><h2>Games <span class="listing-count">3 worlds</span></h2></div>
+            <a href="#play" class="all-worlds" id="browse-worlds">Open a world <span>→</span></a>
+          </div>
+          <div class="directory-tools">
+            <label class="game-search"><span>⌕</span><input id="game-search" type="search" placeholder="Search games..." aria-label="Search games"></label>
+            <label class="sort-label" for="game-sort">Sort by</label>
+            <select id="game-sort" aria-label="Sort games"><option value="active">Most active</option><option value="name">Name</option><option value="visits">Featured</option></select>
           </div>
           <div class="world-grid">
-            <button class="world-card card-meadow" data-room="sunny-side"><span class="card-tag"><i></i><span class="world-count">0 playing</span></span><div class="card-art"><canvas class="world-thumb" data-scene="meadow" aria-label="Sunny Side Up 3D game preview"></canvas></div><span class="card-info"><span><strong>Sunny Side Up</strong><small>by Riverstone · Build &amp; hang out</small></span><span class="card-arrow">▶</span></span></button>
-            <button class="world-card card-docks" data-room="cloud-docks"><span class="card-tag"><i></i><span class="world-count">0 playing</span></span><div class="card-art"><canvas class="world-thumb" data-scene="docks" aria-label="Cloud Nine Docks 3D game preview"></canvas></div><span class="card-info"><span><strong>Cloud Nine Docks</strong><small>by peachybuilds · Explore</small></span><span class="card-arrow">▶</span></span></button>
-            <button class="world-card card-garden" data-room="mossy-garden"><span class="card-tag"><i></i><span class="world-count">0 playing</span></span><div class="card-art"><canvas class="world-thumb" data-scene="garden" aria-label="Mossy Garden 3D game preview"></canvas></div><span class="card-info"><span><strong>Mossy Garden</strong><small>by mossybrick · Build a clubhouse</small></span><span class="card-arrow">▶</span></span></button>
+            <button class="world-card card-meadow" data-room="sunny-side" data-visits="2400"><span class="card-tag"><i></i><span class="world-count">0 playing</span></span><div class="card-art"><canvas class="world-thumb" data-scene="meadow" aria-label="Sunny Side Up 3D game preview"></canvas></div><span class="card-info"><span><strong>Sunny Side Up</strong><small>by Riverstone · Build &amp; hang out</small></span><span class="card-arrow">▶</span></span></button>
+            <button class="world-card card-docks" data-room="cloud-docks" data-visits="830"><span class="card-tag"><i></i><span class="world-count">0 playing</span></span><div class="card-art"><canvas class="world-thumb" data-scene="docks" aria-label="Cloud Nine Docks 3D game preview"></canvas></div><span class="card-info"><span><strong>Cloud Nine Docks</strong><small>by peachybuilds · Explore</small></span><span class="card-arrow">▶</span></span></button>
+            <button class="world-card card-garden" data-room="mossy-garden" data-visits="1100"><span class="card-tag"><i></i><span class="world-count">0 playing</span></span><div class="card-art"><canvas class="world-thumb" data-scene="garden" aria-label="Mossy Garden 3D game preview"></canvas></div><span class="card-info"><span><strong>Mossy Garden</strong><small>by mossybrick · Build a clubhouse</small></span><span class="card-arrow">▶</span></span></button>
           </div>
         </section>
 
@@ -72,7 +77,7 @@
                 <button class="tool-button" data-tool="move" title="Move a brick">↔ <span>Move</span></button>
                 <button class="tool-button" data-tool="copy" title="Copy a brick">▣ <span>Copy</span></button>
                 <button class="tool-button" data-tool="delete" title="Delete a brick">× <span>Delete</span></button>
-                <span id="tool-message" class="tool-message">Click the baseplate to build</span>
+                <span id="tool-message" class="tool-message">Build · right-drag orbit · wheel zoom</span>
               </div>
               <div class="canvas-wrap" id="canvas-wrap">
                 <canvas id="world-canvas" aria-label="Bublux block-building world. Use WASD to move and click to build."></canvas>
@@ -85,7 +90,7 @@
               </div>
               <div class="game-controls">
                 <div class="palette"><span>BRICKS</span><button class="swatch selected" data-color="#e34b4b" aria-label="Red brick"></button><button class="swatch" data-color="#3366cc" aria-label="Blue brick"></button><button class="swatch" data-color="#3a9b52" aria-label="Green brick"></button><button class="swatch" data-color="#f4cf32" aria-label="Yellow brick"></button><button class="swatch" data-color="#8d55c5" aria-label="Purple brick"></button></div>
-                <div class="movement-hint"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd><span>move · Space jump</span></div>
+                <div class="movement-hint"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd><span>move · Space jump · mouse view</span></div>
               </div>
             </div>
             <aside class="side-panel">

@@ -121,6 +121,7 @@ async function handleApi(request, response, url) {
       color: /^#[0-9a-f]{6}$/i.test(data.color) ? data.color : "#ffbd59",
       x: Number.isFinite(data.x) ? Math.max(0, Math.min(19, data.x)) : previous?.x ?? 9,
       y: Number.isFinite(data.y) ? Math.max(0, Math.min(19, data.y)) : previous?.y ?? 9,
+      rotation: Number.isFinite(data.rotation) ? data.rotation : previous?.rotation ?? Math.PI,
       updatedAt: Date.now(),
     };
     room.players.set(id, player);
@@ -132,6 +133,7 @@ async function handleApi(request, response, url) {
     if (!player) return sendJson(response, 404, { error: "Player not found in this room" });
     if (Number.isFinite(data.x)) player.x = Math.max(0, Math.min(19, data.x));
     if (Number.isFinite(data.y)) player.y = Math.max(0, Math.min(19, data.y));
+    if (Number.isFinite(data.rotation)) player.rotation = data.rotation;
     player.updatedAt = Date.now();
     return sendJson(response, 200, { ok: true });
   }

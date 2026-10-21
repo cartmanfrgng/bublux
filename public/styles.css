@@ -235,6 +235,15 @@ h1{font-size:31px;line-height:1.08;margin-bottom:9px}
 .art-label{bottom:7px;padding:4px 8px;font-size:8px}
 .world-section{padding:12px;background:#fff;border:1px solid #c4cdd4;margin-bottom:15px}
 .section-heading{margin-bottom:9px}
+.listing-count{display:inline-block;vertical-align:middle;margin-left:5px;padding:3px 6px;border:1px solid #b8c8d3;border-radius:2px;background:#edf2f5;color:#607a8d;font:9px Arial,sans-serif;letter-spacing:0}
+.directory-tools{height:34px;display:flex;align-items:center;gap:7px;margin-bottom:9px;padding:4px 6px;border:1px solid #c5d0d7;background:#edf1f4}
+.game-search{height:23px;display:flex;align-items:center;gap:5px;flex:1;max-width:275px;padding:0 6px;border:1px solid #abbcc8;background:white;color:#678399}
+.game-search span{font-size:16px}
+.game-search input{width:100%;border:0;outline:0;font:10px Arial,sans-serif;color:#385c77}
+.game-search input::placeholder{color:#91a1ac}
+.sort-label{font-size:9px;color:#60778a}
+#game-sort{height:23px;padding:0 5px;border:1px solid #abbcc8;border-radius:0;background:#f9fafb;color:#385c77;font:10px Arial,sans-serif}
+.world-card[hidden]{display:none}
 .world-grid{gap:9px}
 .world-card{display:block;min-width:0;border:1px solid #b8c4cd;border-radius:2px;background:#f8f9fa;box-shadow:none}
 .world-card:hover{transform:translateY(-1px);box-shadow:0 2px 3px #294e6822}
